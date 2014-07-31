@@ -124,7 +124,6 @@
 			data.pages.push(page);
 			// Call the destroy within the context of the jQuery object
 			pageActions.destroy.call(this, true);
-			console.log(data.pages)
 			data.primeForDownload();
 		},
 		record: {
