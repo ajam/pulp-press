@@ -11,6 +11,10 @@ body {
   font-size: 62.5%;
   margin: 0;
 }
+ul {
+  margin: 0;
+  padding: 0;
+}
 #page-wrapper {
   margin: 0 auto;
   width: 960px;
@@ -18,24 +22,41 @@ body {
 #rouge-vif-logo {
   width: 40%;
 }
-#instruction-bar {
+#options {
   width: 55%;
 }
 #pages-container {
   width: 100%;
   margin-top: 25px;
 }
-#rouge-vif-logo,
-#instruction-bar {
-  display: inline-block;
+.header-item {
   vertical-align: top;
+  display: inline-block;
+  height: 90px;
+}
+#rouge-vif-logo {
   padding: 10px;
 }
-#instruction-bar {
+#options {
   border-top-width: 0;
   border-left-width: 0;
   overflow: auto;
-  padding-top: 47px;
+  padding-left: 5px;
+  position: relative;
+  width: 22%;
+}
+#endnotes {
+  width: 38%;
+}
+#endnotes button {
+  position: relative;
+  top: -2px;
+  left: 5px;
+}
+#endnotes-container {
+  height: 70%;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 #rouge-vif-logo {
   background-color: #e14a31;
@@ -48,14 +69,24 @@ body {
   font-size: 0.4em;
   color: #902615;
 }
-.instruction {
+.option {
   font-size: 1.5em;
   margin-right: 10px;
   font-family: 'Oswald', sans-serif;
   font-weight: 300;
   vertical-align: bottom;
 }
-.instruction form {
+.option-group {
+  display: block;
+}
+.option-title {
+  font-size: 1.4em;
+}
+.option-group[data-type="download"] {
+  position: absolute;
+  bottom: 0;
+}
+.option form {
   display: inline;
 }
 #pages-container {
@@ -92,20 +123,23 @@ body {
   pointer-events: none;
 }
 /* Footnotes */
-.footnote-group {
+.endnote-group {
   margin-bottom: 2px;
   position: relative;
 }
-.footnote-group .destroy {
-  position: absolute;
-  top: 2px;
-  left: 0;
+.endnote-group .destroy {
+  display: inline-block;
+  padding-right: 5px;
+  color: #ccc;
+  vertical-align: top;
+  width: 10px;
+  height: 25px;
 }
-.footnote-group .destroy:hover {
-  text-decoration: underline;
+.endnote-group .destroy:hover {
+  color: #000;
   cursor: pointer;
 }
-.footnotes input {
+.endnotes input {
   display: inline;
   width: 70px;
 }

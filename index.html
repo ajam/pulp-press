@@ -15,14 +15,22 @@
 
 	<div id="page-wrapper">
 
-		<div id="rouge-vif-logo">Pulp <span>&mdash; a web comic maker</span></div><div id="instruction-bar">
-			<span class="instruction">Choose page images:</span>
-			<input id="files" type="file" class="input-btn" multiple>
-			<span class="instruction" data-type="download">
-				<a href="" download="pages.json">
-					<button>Download data</button>
-				</a>
-			</span>
+		<div id="rouge-vif-logo" class="header-item">Pulp press <span>&mdash; a comic maker</span></div><div id="options" class="header-item">
+			<div class="option-group">
+				<span class="option">Choose page images:</span>
+				<input id="files" type="file" class="input-btn" multiple>
+			</div>
+			<div class="option-group" data-type="download">
+				<span class="option">
+					<a href="" download="pages.json">
+						<button>Download data</button>
+					</a>
+				</span>
+			</div>
+		</div><div id="endnotes" class="header-item">
+			<div class="option-title">Endnotes <button class="add">+</button></div>
+			<ul id="endnotes-container"></ul>
+			
 		</div>
 		<!-- TODO, pages tray -->
 		<div id="pages-tray"></div>
@@ -40,11 +48,6 @@
 						<div class="page-info-hed">Script text</div>
 						<textarea placeholder="Panel dialog and captions..."></textarea>
 					</div>
-					<div class="footnotes page-info-item">
-						<div class="page-info-hed">Footnotes</div>
-						<div class="footnotes-container"></div>
-						<button>Add</button>
-					</div>
 				</div>
 				<div class="page-actions">
 					<div class="destroy"><button>Delete</button></div>
@@ -57,14 +60,14 @@
 
 	<script type="text/jst" id="hotspot-templ">
 		<div class="hotspot create-dragging" data-number="<%= hotspot_number %>">
-			<div class="destroy">X</div>
+			<div class="destroy"><span class="text">X</span></div>
 			<div class="hotspot-number"><%= hotspot_number %></div>
 		</div>
 	</script>
 
-	<script type="text/jst" id="footnote-templ">
-		<div class="footnote-group">
-			<div class="destroy">X</div>
+	<script type="text/jst" id="endnote-templ">
+		<div class="endnote-group">
+			<div class="destroy"><span class="text">X</span></div>
 			<input type="text" name="text" placeholder="Text..."> <input type="text" name="url" placeholder="URL...">
 		</div>
 	</script>

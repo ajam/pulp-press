@@ -7,7 +7,7 @@
 	var templates = {
 		pageContainerFactory: _.template( $('#page-container-templ').html() ),
 		hotspotFactory: _.template( $('#hotspot-templ').html() ),
-		footnote: $('#footnote-templ').html()
+		endnote: $('#endnote-templ').html()
 	}
 
 	var states = {
@@ -15,11 +15,14 @@
 	}
 
 	var data = {
-		pages: [],
+		info: {
+			endnotes: [],
+			pages: []
+		},
 		primeForDownload: function(){
-			var data_url = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data.pages));
-			console.log(data_url)
-			$('.instruction[data-type="download"] a').attr('href','data:' + data_url);
+			data.info.endnotes = bookInfo.endnotes.record();
+			var data_url = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data.info));
+			$('.option-group[data-type="download"] a').attr('href','data:' + data_url);
 		}
 	}
 
@@ -103,15 +106,33 @@
 		}
 	}
 
-	var pageInfo = {
-		footnotes: {
+	var bookInfo = {
+		endnotes: {
 			add: function(){
-				var $footnotes_container = $(this).siblings('.footnotes-container');
-				var footnote_markup = templates.footnote;
-				$footnotes_container.append(footnote_markup);
+				var $endnotes_container = $('#endnotes-container');
+				var endnote_markup = templates.endnote;
+				$endnotes_container.append(endnote_markup);
 			},
 			destroy: function(){
-				$(this).parents('.footnote-group').remove();
+				$(this).parents('.endnote-group').remove();
+				data.primeForDownload();
+			},
+			record: function(){
+				var endnotes = [];
+				$('.endnote-group').each(function(i){
+					var $this = $(this);
+					var text = $this.find('input[name="text"]').val(),
+							url  = $this.find('input[name="url"]').val(),
+							obj = {};
+					// Don't add if text is empty
+					if (text) {
+						obj.number = i + 1;
+						obj.text = text;
+						if (url) obj.url = url;
+					}
+					endnotes.push(obj);
+				});
+				return endnotes;
 			}
 		}
 	}
@@ -121,7 +142,7 @@
 			$(this).prop('disabled', true);
 			var page_number = +$(this).parents('.page-container').attr('data-page-number');
 			var page = pageActions.record.all(page_number);
-			data.pages.push(page);
+			data.info.pages.push(page);
 			// Call the destroy within the context of the jQuery object
 			pageActions.destroy.call(this, true);
 			data.primeForDownload();
@@ -133,7 +154,6 @@
 				var $pageContainer = $('.page-container[data-page-number="' + pageNumber + '"]')
 				pageData.hotspots = this.hotspots($pageContainer);
 				pageData.text = this.text($pageContainer);
-				pageData.footnotes = this.footnotes($pageContainer);
 				return pageData;
 			},
 			hotspots: function($cntnr){
@@ -152,17 +172,6 @@
 					hotspots.push(hotspot);
 				});
 				return hotspots;
-			},
-			footnotes: function($cntnr){
-				var footnotes = [];
-				$cntnr.find('.footnote-group').each(function(){
-					var $this = $(this);
-					var text = $this.find('input[name="text"]').val(),
-							url  = $this.find('input[name="url"]').val();
-					// Don't add if text is empty
-					if (text) footnotes.push([text,url]);
-				});
-				return footnotes;
 			},
 			text: function($cntnr){
 				return $cntnr.find('.alt-text textarea').val();
@@ -249,9 +258,10 @@
 		  $('#pages-container').on('mousedown', '.hotspot', listeners.killPropagation);
 		  $('#pages-container').on('mousedown', '.hotspot .destroy', hotspots.destroy);
 		},
-		pageInfo: function(){
-			$('#pages-container').on('click', '.footnotes button', pageInfo.footnotes.add);
-			$('#pages-container').on('click', '.footnote-group .destroy', pageInfo.footnotes.destroy);
+		endnotes: function(){
+			$('#endnotes').on('click', 'button.add', bookInfo.endnotes.add);
+			$('#endnotes').on('click', '.destroy', bookInfo.endnotes.destroy);
+			$('#endnotes').on('keyup', 'input[type="text"]', data.primeForDownload);
 		},
 		pageActions: function(){
 			$('#pages-container').on('click', '.page-actions .save-page button', pageActions.save);
@@ -267,7 +277,7 @@
 		go: function(){
 			listeners.general();
 			listeners.hotspotAdding();
-			listeners.pageInfo();
+			listeners.endnotes();
 			listeners.pageActions();
 		}
 	}
