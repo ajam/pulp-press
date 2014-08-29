@@ -20,7 +20,7 @@
 			pages: []
 		},
 		primeForDownload: function(){
-			data.info.endnotes = bookInfo.endnotes.record($('#endnotes-container'));
+			data.info.endnotes = notes.record($('#endnotes-container'));
 			var data_url = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data.info));
 			$('.option-group[data-type="download"] a').attr('href','data:' + data_url);
 		}
