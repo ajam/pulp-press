@@ -7,7 +7,7 @@
 	var templates = {
 		pageContainerFactory: _.template( $('#page-container-templ').html() ),
 		hotspotFactory: _.template( $('#hotspot-templ').html() ),
-		endnote: $('#endnote-templ').html()
+		note: $('#note-templ').html()
 	}
 
 	var states = {
@@ -20,7 +20,7 @@
 			pages: []
 		},
 		primeForDownload: function(){
-			data.info.endnotes = bookInfo.endnotes.record();
+			data.info.endnotes = bookInfo.endnotes.record($('#endnotes-container'));
 			var data_url = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data.info));
 			$('.option-group[data-type="download"] a').attr('href','data:' + data_url);
 		}
@@ -106,34 +106,32 @@
 		}
 	}
 
-	var bookInfo = {
-		endnotes: {
-			add: function(){
-				var $endnotes_container = $('#endnotes-container');
-				var endnote_markup = templates.endnote;
-				$endnotes_container.append(endnote_markup);
-			},
-			destroy: function(){
-				$(this).parents('.endnote-group').remove();
-				data.primeForDownload();
-			},
-			record: function(){
-				var endnotes = [];
-				$('.endnote-group').each(function(i){
-					var $this = $(this);
-					var text = $this.find('input[name="text"]').val(),
-							url  = $this.find('input[name="url"]').val(),
-							obj = {};
-					// Don't add if text is empty
-					if (text) {
-						obj.number = i + 1;
-						obj.text = text;
-						if (url) obj.url = url;
-					}
-					endnotes.push(obj);
-				});
-				return endnotes;
-			}
+	var notes = {
+		add: function(){
+			var $notes_container = $(this).parents('.notes').find('.notes-container');
+			var note_markup = templates.note;
+			$notes_container.append(note_markup);
+		},
+		destroy: function(){
+			console.log('here')
+			$(this).parents('.note-group').remove();
+		},
+		record: function($cntr){
+			var notes = [];
+			$cntr.find('.note-group').each(function(i){
+				var $this = $(this);
+				var text = $this.find('input[name="text"]').val(),
+						url  = $this.find('input[name="url"]').val(),
+						obj = {};
+				// Don't add if text is empty
+				if (text) {
+					obj.number = i + 1;
+					obj.text = text;
+					if (url) obj.url = url;
+				}
+				notes.push(obj);
+			});
+			return notes;
 		}
 	}
 
@@ -154,6 +152,7 @@
 				var $pageContainer = $('.page-container[data-page-number="' + pageNumber + '"]')
 				pageData.hotspots = this.hotspots($pageContainer);
 				pageData.text = this.text($pageContainer);
+				pageData.footnotes = notes.record($pageContainer);
 				return pageData;
 			},
 			hotspots: function($cntnr){
@@ -258,9 +257,9 @@
 		  $('#pages-container').on('mousedown', '.hotspot', listeners.killPropagation);
 		  $('#pages-container').on('mousedown', '.hotspot .destroy', hotspots.destroy);
 		},
-		endnotes: function(){
-			$('#endnotes').on('click', 'button.add', bookInfo.endnotes.add);
-			$('#endnotes').on('click', '.destroy', bookInfo.endnotes.destroy);
+		notes: function(){
+			$('.notes .add').on('click', notes.add);
+			$('.notes').on('click', '.destroy', notes.destroy);
 			$('#endnotes').on('keyup', 'input[type="text"]', data.primeForDownload);
 		},
 		pageActions: function(){
@@ -277,7 +276,7 @@
 		go: function(){
 			listeners.general();
 			listeners.hotspotAdding();
-			listeners.endnotes();
+			listeners.notes();
 			listeners.pageActions();
 		}
 	}
