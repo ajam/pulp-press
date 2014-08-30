@@ -132,8 +132,8 @@
 					obj.number = i + 1;
 					obj.text = text;
 					if (url) obj.url = url;
+					notes.push(obj);
 				}
-				notes.push(obj);
 			});
 			return notes;
 		}
