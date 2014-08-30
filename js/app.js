@@ -7,7 +7,8 @@
 	var templates = {
 		pageContainerFactory: _.template( $('#page-container-templ').html() ),
 		hotspotFactory: _.template( $('#hotspot-templ').html() ),
-		note: $('#note-templ').html()
+		note: $('#note-templ').html(),
+		text: $('#text-templ').html()
 	}
 
 	var states = {
@@ -107,9 +108,12 @@
 	}
 
 	var notes = {
-		add: function(){
-			var $notes_container = $(this).parents('.notes').find('.notes-container');
-			var note_markup = templates.note;
+		add: function(mode){
+			var $this = $(this),
+					mode = $this.attr('data-mode'),
+					$notes_container = $this.parents('.notes-wrapper').find('.notes-list-container'),
+					note_markup = templates[mode];
+					
 			$notes_container.append(note_markup);
 		},
 		destroy: function(){
@@ -258,8 +262,8 @@
 		  $('#pages-container').on('mousedown', '.hotspot .destroy', hotspots.destroy);
 		},
 		notes: function(){
-			$('.notes .add').on('click', notes.add);
-			$('.notes').on('click', '.destroy', notes.destroy);
+			$('#page-wrapper').on('click', '.add', notes.add);
+			$('#page-wrapper').on('click', '.destroy', notes.destroy);
 			$('#endnotes').on('keyup', 'input[type="text"]', data.primeForDownload);
 		},
 		pageActions: function(){

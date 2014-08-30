@@ -27,9 +27,9 @@
 					</a>
 				</span>
 			</div>
-		</div><div id="endnotes" class="header-item notes">
-			<div class="option-title">Endnotes <button class="add">+</button></div>
-			<ul id="endnotes-container" class="notes-container"></ul>
+		</div><div id="endnotes" class="header-item notes-wrapper">
+			<div class="option-title">Endnotes <button data-mode="note" class="add">+</button></div>
+			<ul id="endnotes-container" class="notes-list-container"></ul>
 			
 		</div>
 		<!-- TODO, pages tray -->
@@ -47,6 +47,11 @@
 					<div class="alt-text page-info-item">
 						<div class="page-info-hed">Script text</div>
 						<textarea placeholder="Panel dialog and captions..."></textarea>
+					</div>
+					<div id="footnotes" class="page-info-item notes-wrapper">
+						<div class="page-info-hed">Page text</div>
+						<div id="footnotes-container" class="notes-list-container"></div>
+						<button class="add" data-mode="text">+</button>
 					</div>
 				</div>
 				<div class="page-actions">
@@ -69,6 +74,12 @@
 		<div class="note-group">
 			<div class="destroy"><span class="text">&times;</span></div>
 			<input type="text" name="text" placeholder="Text..."> <input type="text" name="url" placeholder="URL...">
+		</div>
+	</script>
+
+	<script type="text/jst" id="text-templ">
+		<div class="note-group">
+			<div class="destroy"><span class="text">&times;</span></div><input type="text" name="text" placeholder="Text...">
 		</div>
 	</script>
 
