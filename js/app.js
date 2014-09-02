@@ -22,6 +22,7 @@
 		},
 		primeForDownload: function(){
 			data.info.endnotes = notes.record($('#endnotes-container'));
+			data.info.pages = data.info.pages.sort(helpers.sortByNumber);
 			var data_url = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data.info));
 			$('.option-group[data-type="download"] a').attr('href','data:' + data_url);
 		}
@@ -56,6 +57,9 @@
 		},
 		cssifyValues: function(val){
 			return (val*100).toFixed(2);
+		},
+		sortByNumber: function(a,b){
+			return a.number - b.number;
 		}
 	}
 
