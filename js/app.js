@@ -21,7 +21,7 @@
 			pages: []
 		},
 		primeForDownload: function(){
-			data.info.endnotes = notes.record($('#endnotes-container'));
+			data.info.endnotes = notes.record($('#endnotes-container'), 'objects');
 			data.info.pages = data.info.pages.sort(helpers.sortByNumber);
 			var data_url = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data.info));
 			$('.option-group[data-type="download"] a').attr('href','data:' + data_url);
@@ -124,7 +124,7 @@
 			console.log('here')
 			$(this).parents('.note-group').remove();
 		},
-		record: function($cntr){
+		record: function($cntr, mode){
 			var notes = [];
 			$cntr.find('.note-group').each(function(i){
 				var $this = $(this);
@@ -133,9 +133,13 @@
 						obj = {};
 				// Don't add if text is empty
 				if (text) {
-					obj.number = i + 1;
-					obj.text = text;
-					if (url) obj.url = url;
+					if (mode == 'objects'){
+						obj.number = i + 1;
+						obj.text = text;
+						if (url) obj.url = url;
+					} else if (mode == 'list'){
+						obj = text;
+					}
 					notes.push(obj);
 				}
 			});
@@ -159,8 +163,8 @@
 				pageData.number = pageNumber;
 				var $pageContainer = $('.page-container[data-page-number="' + pageNumber + '"]')
 				pageData.hotspots = this.hotspots($pageContainer);
-				pageData.text = this.text($pageContainer);
-				pageData.footnotes = notes.record($pageContainer);
+				pageData.script_text = this.text($pageContainer);
+				pageData.page_text = notes.record($pageContainer, 'list');
 				return pageData;
 			},
 			hotspots: function($cntnr){
