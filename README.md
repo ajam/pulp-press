@@ -7,7 +7,7 @@ A web comic maker to be used with the [Pulp](https://github.com/ajam/pulp) comic
 
 We have a hosted version of the interface [here](http://ajam.github.io/pulp-press). To begin:
 
-1. Select your images **make sure they are named `page-1`, `page-2` etc. File format can be anything.
+1. Select your images **make sure they are named according to the following convention `page-1`, `page-2` etc.*** File format can be anything.
 2. Start clicking and dragging to define the location of your panels.
 3. You can also add alt text for each page with the fields on the left — useful for adding the script so that the HTML still contains your text.
 4. When you're done with a page, click "Save page"
