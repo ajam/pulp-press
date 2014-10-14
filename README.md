@@ -35,5 +35,15 @@ stylus -w css -u nib
 
 This command says to watch the `css` folder and use Nib.
 
-
 You can also ignore Stylus altogether and modify the `.css` files and disregard the `.styl` files if you like.
+
+### Hosting your own
+
+If you don't want to use the hosted version, clone this repository and from the project root run a simple Python server. You can do that with the following two commands
+
+````
+git clone https://github.com/ajam/pulp-press && cd pulp-press
+python -m SimpleHTTPServer 8000
+````
+
+In your browser, now go to <http://0.0.0.0:8000> to view.
