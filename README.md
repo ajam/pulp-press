@@ -25,7 +25,6 @@ To install run (you will most likely be prompted for your system password):
 ````
 sudo npm install -g stylus
 sudo npm install -g nib
-
 ````
 
 Then, in the project folder, watch your `.styl` files for changes and recompile the `.css` files with:
