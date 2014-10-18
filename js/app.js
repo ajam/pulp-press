@@ -165,9 +165,6 @@
 				pageData.hotspots = this.hotspots($pageContainer) || [];
 				pageData.script_text = this.text($pageContainer) || '';
 				pageData.page_text = notes.record($pageContainer, 'list') || [];
-				console.log(pageData)
-				console.log(pageData.script_text)
-				console.log(this.text($pageContainer))
 				return pageData;
 			},
 			hotspots: function($cntnr){
