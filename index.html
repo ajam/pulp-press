@@ -15,27 +15,61 @@
 
 	<div id="page-wrapper">
 
-		<div id="rouge-vif-logo" class="header-item">Pulp press <span>&mdash; a comic maker</span></div><div id="options" class="header-item">
-			<div class="option-group">
-				<span class="option">Choose page images:</span>
-				<input id="files" type="file" class="input-btn" multiple>
-			</div>
-			<div class="option-group" data-type="download">
-				<span class="option">
-					<a href="" download="pages.json">
-						<button>Download data</button>
-					</a>
-				</span>
-			</div>
-		</div><div id="endnotes" class="header-item notes-wrapper">
-			<div class="option-title">Endnotes <button data-mode="note" class="add">+</button></div>
-			<ul id="endnotes-container" class="notes-list-container"></ul>
-			
-		</div>
-		<!-- TODO, pages tray -->
-		<div id="pages-tray"></div>
+		<div id="rouge-vif-logo" class="header-item">Pulp press <span>&mdash; the comic maker companion to <a href="http://github.com/ajam/pulp">Pulp</a>.</span></div>
 
-		<div id="pages-container"></div>
+		<div id="steps-container">
+
+			<div class="step-item" data-which="load-data">
+				<div class="step-text">
+					<div class="step-number">Optional:</div>
+					<div class="step-prompt">Load a previous `pages.json` file.</div>
+				</div>
+				<input id="existing-data" type="file" class="input-btn" multiple>
+			</div>
+
+			<div class="step-item" data-which="choose-images">
+				<div class="step-text">
+					<div class="step-number">Step One:</div>
+					<div class="step-prompt">Choose images, draw hotspots.</div>
+				</div>
+				<input id="images" type="file" class="input-btn" multiple>
+			</div>
+
+			<div class="step-item" data-which="add-endnotes">
+				<div class="step-text">
+					<div class="step-number">Step Two:</div>
+					<div class="step-prompt">Add <span class="internal-link" data-which="endnotes">endnotes</span>.</div>
+				</div>
+			</div>
+
+			<div class="step-item" data-which="download">
+				<div class="step-text">
+					<div class="step-number">Step Three:</div>
+					<div class="step-prompt">Get your `pages.json` file.</div>
+				</div>
+				<a id="download-button" href="" download="pages.json">
+					<button>Download data</button>
+				</a>
+			</div>
+
+		</div>
+
+		<div id="tabs">
+			<ul>
+				<li data-which="pages" class="active">Pages</li>
+				<li data-which="endnotes">Endnotes</li>
+			</ul>
+		</div>
+
+
+
+		<div data-which="pages" class="main-container-el active">
+		</div>
+
+		<div data-which="endnotes" class="notes-list-container main-container-el">
+			<button id="add-endnote" data-mode="note" class="add">+ Add endnote</button>
+			<ul id="endnotes-container" class="notes-list-container"></ul>
+		</div>
 
 	</div>
 
@@ -44,19 +78,19 @@
 			<div class="page-furniture">
 				<div class="page-info">
 					<div class="page-name"><%= fileName %></div>
-					<div class="alt-text page-info-item">
+					<div class="page-actions rail-item">
+						<div class="destroy"><button>Delete</button></div>
+						<div class="save-page"><button>Save page</button></div>
+					</div>
+					<div class="alt-text rail-item">
 						<div class="page-info-hed">Script text</div>
 						<textarea placeholder="Panel dialog and captions..."></textarea>
 					</div>
-					<div id="footnotes" class="page-info-item notes-wrapper">
+					<div id="footnotes" class="rail-item notes-wrapper">
 						<div class="page-info-hed">Page text</div>
 						<div id="footnotes-container" class="notes-list-container"></div>
 						<button class="add" data-mode="text">+</button>
 					</div>
-				</div>
-				<div class="page-actions">
-					<div class="destroy"><button>Delete</button></div>
-					<div class="save-page"><button>Save page</button></div>
 				</div>
 			</div>
 			<div class="hotspots"></div>

@@ -7,7 +7,8 @@ html {
   font-size: 16px;
 }
 body {
-  font-family: 'Oswald', sans-serif;
+  font-family: Helvetica, sans-serif;
+  font-weight: 200;
   font-size: 62.5%;
   margin: 0;
 }
@@ -17,33 +18,119 @@ ul {
 }
 #page-wrapper {
   margin: 0 auto;
-  width: 960px;
-}
-#rouge-vif-logo {
-  width: 40%;
-}
-#options {
-  width: 55%;
-}
-#pages-container {
   width: 100%;
-  margin-top: 25px;
-}
-.header-item {
-  vertical-align: top;
-  display: inline-block;
-  height: 90px;
+  min-width: 820px;
 }
 #rouge-vif-logo {
+  width: 100%;
+  font-family: 'Oswald', sans-serif;
+  font-weight: normal;
+  background-color: #e14a31;
+  font-size: 4.4em;
+  font-style: italic;
   padding: 10px;
 }
-#options {
-  border-top-width: 0;
-  border-left-width: 0;
-  overflow: auto;
-  padding-left: 5px;
-  position: relative;
-  width: 22%;
+#rouge-vif-logo span {
+  font-family: georgia;
+  font-size: 0.4em;
+  color: #902615;
+}
+#rouge-vif-logo span a {
+  color: #902615;
+}
+#rouge-vif-logo span a:hover {
+  color: #240a05;
+}
+button {
+  letter-spacing: 0;
+}
+button:hover {
+  cursor: pointer;
+}
+#steps-container {
+  background-color: #f3f0df;
+  border-bottom: 1px solid #aaa;
+}
+#steps-container .step-item {
+  padding-top: 10px;
+  display: inline-block;
+  vertical-align: top;
+  width: 25%;
+  border-left: 1px dashed #aaa;
+  padding: 10px;
+  background-color: #f3f0df;
+  margin-left: -3px;
+  height: 70px;
+}
+#steps-container .step-item:first-child {
+  border: none;
+  margin: 0;
+}
+#steps-container .step-text {
+  font-size: 1.2em;
+  line-height: 1.2em;
+  margin-bottom: 5px;
+}
+#steps-container .step-number {
+  font-weight: bold;
+}
+.container-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.4em;
+}
+.main-container-el[data-which="pages"] {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 100%;
+  font-family: 'Oswald', sans-serif;
+}
+.main-container-el {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 15px;
+  display: none;
+}
+.main-container-el.active {
+  display: block;
+}
+#tabs {
+  font-size: 1.8em;
+  padding-top: 20px;
+  text-align: center;
+}
+#tabs ul {
+  padding: 0;
+  margin: 0;
+}
+#tabs ul,
+#tabs li {
+  display: inline-block;
+  vertical-align: top;
+}
+#tabs li {
+  list-style: none;
+  width: 75px;
+  color: #ccc;
+  text-align: center;
+}
+#tabs li:hover {
+  cursor: default;
+}
+#tabs li.active {
+  font-weight: bold;
+  color: #000;
+}
+#tabs li:not(.active):hover {
+  cursor: pointer;
+  color: #666;
+}
+.internal-link {
+  text-decoration: underline;
+}
+.internal-link:hover {
+  cursor: pointer;
 }
 #endnotes {
   width: 38%;
@@ -53,27 +140,23 @@ ul {
   top: -2px;
   left: 5px;
 }
+#add-endnote {
+  margin: 0 auto;
+  display: inherit;
+}
 #endnotes-container {
-  height: 70%;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  font-family: "Oswald", sans-serif;
+  width: 50%;
+  max-width: 960px;
+  margin: 10px auto 0 auto;
+  text-align: center;
 }
-#rouge-vif-logo {
-  background-color: #e14a31;
-  font-size: 4.7em;
-  font-style: italic;
-  padding-left: 20px;
-}
-#rouge-vif-logo span {
-  font-family: georgia;
-  font-size: 0.4em;
-  color: #902615;
+#endnotes-container input {
+  width: 40%;
 }
 .option {
   font-size: 1.5em;
   margin-right: 10px;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 300;
   vertical-align: bottom;
 }
 .option-group {
@@ -89,18 +172,11 @@ ul {
 .option form {
   display: inline;
 }
-#pages-container {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
 .page-container {
   margin: 0 auto;
   position: relative;
 }
-.page-info,
-.page-actions {
+.page-info {
   position: absolute;
   top: 7px;
   font-size: 1.2em;
@@ -111,7 +187,7 @@ ul {
   border-top: 1px solid #424242;
   text-align: right;
 }
-.page-info-item {
+.rail-item {
   margin-top: 20px;
 }
 .page-name,
@@ -152,7 +228,7 @@ ul {
 /* Hotspots */
 .hotspot {
   position: absolute;
-  background-color: rgba(255,204,0,0.5);
+  background-color: rgba(50,183,226,0.5);
   min-width: 10px;
   min-height: 20px;
   display: table;
@@ -169,10 +245,18 @@ ul {
 .hotspot .destroy {
   position: absolute;
   padding: 5px;
-  background-color: #fc0;
+  font-weight: bold;
+  font-family: Helvetica, sans-serif;
+  background-color: #000;
+  color: #fff;
+  border-bottom-left-radius: 4px;
   right: 0;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  line-height: 12px;
 }
 .hotspot .destroy:hover {
-  text-decoration: underline;
+  background-color: #e14a31;
   cursor: pointer !important;
 }

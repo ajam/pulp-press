@@ -1,19 +1,20 @@
 (function(){
 
-	var $objects = {
-		pagesContainer: $('#pages-container')
-	}
+	var $els = {
+		pagesContainer: $('.main-container-el[data-which="pages"]'),
+		endnotesContainer: $('.main-container-el[data-which="endnotes"]')
+	};
 
 	var templates = {
 		pageContainerFactory: _.template( $('#page-container-templ').html() ),
 		hotspotFactory: _.template( $('#hotspot-templ').html() ),
 		note: $('#note-templ').html(),
 		text: $('#text-templ').html()
-	}
+	};
 
 	var states = {
 		createHotspotDragging: false
-	}
+	};
 
 	var data = {
 		info: {
@@ -23,10 +24,20 @@
 		primeForDownload: function(){
 			data.info.endnotes = notes.record($('#endnotes-container'), 'objects');
 			data.info.pages = data.info.pages.sort(helpers.sortByNumber);
+			console.log(data.info)
 			var data_url = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data.info));
-			$('.option-group[data-type="download"] a').attr('href','data:' + data_url);
+			$('#download-button').attr('href','data:' + data_url);
 		}
-	}
+	};
+
+	var layout = {
+		switchTabs: function(which){
+			$('#tabs li.active').removeClass('active');
+			$('#tabs li[data-which="'+which+'"]').addClass('active');
+			$('.main-container-el.active').removeClass('active');
+			$('.main-container-el[data-which="'+which+'"]').addClass('active');
+		}
+	};
 
 	var helpers = {
 		countHotspots: function($container, $hotspot, dir){
@@ -61,7 +72,7 @@
 		sortByNumber: function(a,b){
 			return a.number - b.number;
 		}
-	}
+	};
 
 	var hotspots = {
 		bake: function(e){
@@ -71,10 +82,12 @@
 			helpers.countHotspots($pageContainer, $new_hotspot, 'add');
 			var hotspot_markup = templates.hotspotFactory({hotspot_number: $pageContainer.attr('data-hotspots')});
 			var $new_hotspot = $(hotspot_markup).appendTo( $pageContainer.find('.hotspots') );
+
 			$new_hotspot.css({
 				top: e.pageY - $(this).offset().top,
 				left: e.pageX - $(this).offset().left
 			});
+
 			$new_hotspot.draggable({
 				containment: $pageContainer
 			}).resizable();
@@ -109,19 +122,18 @@
 			helpers.countHotspots($(this).parents('.page-container'), $hotspot, 'remove');
 			$hotspot.remove();
 		}
-	}
+	};
 
 	var notes = {
 		add: function(mode){
 			var $this = $(this),
 					mode = $this.attr('data-mode'),
-					$notes_container = $this.parents('.notes-wrapper').find('.notes-list-container'),
+					$notes_container = $this.siblings('.notes-list-container');
 					note_markup = templates[mode];
-					
+
 			$notes_container.append(note_markup);
 		},
 		destroy: function(){
-			console.log('here')
 			$(this).parents('.note-group').remove();
 		},
 		record: function($cntr, mode){
@@ -145,7 +157,7 @@
 			});
 			return notes;
 		}
-	}
+	};
 
 	var pageActions = {
 		save: function(){
@@ -155,6 +167,7 @@
 			data.info.pages.push(page);
 			// Call the destroy within the context of the jQuery object
 			pageActions.destroy.call(this, true);
+			console.log(data.info)
 			data.primeForDownload();
 		},
 		record: {
@@ -212,7 +225,7 @@
 							// Append to the thumbnail
 							// pageActions.addPages.append(theFile.name, e.target.result)
 							// Append to the thumbnail drawer
-							pageActions.addPages.append(theFile.name, e.target.result, $objects.pagesContainer)
+							pageActions.addPages.append(theFile.name, e.target.result, $els.pagesContainer)
 						};
 					})(f);
 					// Read in the image file as a data URL.
@@ -238,7 +251,7 @@
 				}).prependTo( $pageContainer );
 
 				var left_offset = this.positionElement($pageContainer.find('.page-info'), 'left');
-				this.positionElement($pageContainer.find('.page-actions'), 'right');
+				// this.positionElement($pageContainer.find('.page-actions'), 'right');
 				$pageContainer.find('.page-info textarea').css('max-width',(left_offset - 20) + 'px')
 
 			},
@@ -249,40 +262,51 @@
 				return el_width;
 			}
 		}
-	}
+	};
 
 	var listeners = {
 		general: function(){
 			// Listen for file uploading
-		  document.getElementById('files').addEventListener('change', pageActions.addPages.load, false);
-		  $('#pages-container').on('mousedown', '.page-furniture', listeners.killPropagation);
+		  document.getElementById('images').addEventListener('change', pageActions.addPages.load, false);
+		  $els.pagesContainer.on('mousedown', '.page-furniture', listeners.killPropagation);
+		  $('#tabs li').on('click', function(){
+		  	var $this = $(this),
+		  			which = $this.attr('data-which'),
+		  			isActive = $this.hasClass('active');
+
+		  	if (!isActive){
+		  		layout.switchTabs(which);
+		  	}
+		  });
 		},
 		hotspotAdding: function(){
 		  // Listen for click events on each page-container
 		  // Add the listener to the parent object, listening to its children
-		  $('#pages-container').on('mousedown', '.page-container', hotspots.bake);
+		  $els.pagesContainer.on('mousedown', '.page-container', hotspots.bake);
 		  // Listen to the drag event
-		  $('#pages-container').on('mousemove', '.page-container', hotspots.sizeByDrag.init);
+		  $els.pagesContainer.on('mousemove', '.page-container', hotspots.sizeByDrag.init);
 		  // Stop create hotspot drag state
-		  $('#pages-container').on('mouseup', '.page-container', hotspots.sizeByDrag.end);
+		  $els.pagesContainer.on('mouseup', '.page-container', hotspots.sizeByDrag.end);
 		  // Don't add a new hotspot if we're just dragging a hotspot
-		  $('#pages-container').on('mousedown', '.hotspot', listeners.killPropagation);
-		  $('#pages-container').on('mousedown', '.hotspot .destroy', hotspots.destroy);
+		  $els.pagesContainer.on('mousedown', '.hotspot', listeners.killPropagation);
+		  $els.pagesContainer.on('mousedown', '.hotspot .destroy', hotspots.destroy);
 		},
 		notes: function(){
 			$('#page-wrapper').on('click', '.add', notes.add);
 			$('#page-wrapper').on('click', '.destroy', notes.destroy);
-			$('#endnotes').on('keyup', 'input[type="text"]', data.primeForDownload);
+			$('.internal-link[data-which="endnotes"]').on('click',  function(){
+				layout.switchTabs('endnotes');
+			});
+			$els.endnotesContainer.on('keyup', 'input[type="text"]', data.primeForDownload);
 		},
 		pageActions: function(){
-			$('#pages-container').on('click', '.page-actions .save-page button', pageActions.save);
-			$('#pages-container').on('click', '.page-actions .destroy button', pageActions.destroy);
+			$els.pagesContainer.on('click', '.page-actions .save-page button', pageActions.save);
+			$els.pagesContainer.on('click', '.page-actions .destroy button', pageActions.destroy);
 		},
 		killPropagation: function(e){
 	  	e.stopPropagation();
 		}
-
-	}
+	};
 
 	var init = {
 		go: function(){
@@ -291,7 +315,7 @@
 			listeners.notes();
 			listeners.pageActions();
 		}
-	}
+	};
 
 	init.go();
 

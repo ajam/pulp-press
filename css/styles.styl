@@ -7,7 +7,8 @@ html
 	font-size 16px
 
 body
-	font-family: 'Oswald',sans-serif;
+	font-family Helvetica,sans-serif
+	font-weight 200
 	font-size 62.5%
 	margin 0
 
@@ -16,54 +17,126 @@ ul
 	padding 0
 
 rouge_vif = #e14a31
+the_beige = #f3f0df
 
 #page-wrapper
 	margin 0 auto
-	width 960px
-#rouge-vif-logo
-	width 40%
-#options
-	width 55%
-#pages-container
 	width 100%
-	margin-top 25px
-.header-item
-	vertical-align top
-	display inline-block
-	height 90px
+	min-width 820px
 #rouge-vif-logo
+	width 100%
+	font-family 'Oswald', sans-serif
+	font-weight normal
+	background-color rouge_vif
+	font-size 4.4em
+	font-style italic
 	padding 10px
-#options
-	border-top-width 0
-	border-left-width 0
-	overflow auto
-	padding-left 5px
-	position relative
-	width 22%
+#rouge-vif-logo span
+	font-family georgia
+	font-size .4em
+	color darken(rouge_vif, 40%)
+#rouge-vif-logo span a
+	color darken(rouge_vif, 40%)
+#rouge-vif-logo span a:hover
+	color darken(rouge_vif, 85%)
+
+button
+	letter-spacing 0
+button:hover
+	cursor pointer
+
+#steps-container
+	// box-shadow 0px 6px 12px -8px #757575
+	background-color the_beige
+	border-bottom 1px solid #aaa
+	.step-item
+		padding-top 10px
+		display inline-block
+		vertical-align top
+		width 25%
+		border-left 1px dashed #aaa
+		padding 10px
+		background-color the_beige
+		margin-left -3px
+		height 70px
+	.step-item:first-child
+		border none
+		margin 0
+	.step-text
+		font-size 1.2em
+		line-height 1.2em
+		margin-bottom 5px
+	.step-number
+		font-weight bold
+
+
+.container-title
+	font-family 'Oswald', sans-serif
+	font-size 1.4em
+
+.main-container-el[data-which="pages"]
+	user-select none
+	width 100%
+	font-family 'Oswald', sans-serif
+
+.main-container-el
+	display inline-block
+	vertical-align top
+	margin-top 15px
+	display none
+.main-container-el.active
+	display block
+
+#tabs
+	font-size 1.8em
+	padding-top 20px
+	text-align center
+	ul
+		padding 0
+		margin 0
+	ul,li
+		display inline-block
+		vertical-align top
+	li
+		list-style none
+		width 75px
+		color #ccc
+		text-align center
+	li:hover
+		cursor default
+	li.active
+		font-weight bold
+		color #000
+	li:not(.active):hover
+		cursor pointer
+		color #666
+
+.internal-link
+	text-decoration underline
+.internal-link:hover
+	cursor pointer
+
 #endnotes
 	width 38%
 	button
 		position relative
 		top -2px
 		left 5px
+#add-endnote
+	margin 0 auto
+	display inherit
 #endnotes-container
-	height 70%
-	overflow-x hidden
-	overflow-y scroll
-#rouge-vif-logo
-	background-color rouge_vif
-	font-size 4.7em
-	font-style italic
-	padding-left 20px
-#rouge-vif-logo span
-	font-family georgia
-	font-size .4em
-	color darken(rouge_vif, 40%)
+	font-family "Oswald", sans-serif
+	width 50%
+	max-width 960px
+	margin 10px auto 0 auto
+	text-align center
+	input
+		width 40%
+
 .option
 	font-size 1.5em
 	margin-right 10px
-	font-family 'Oswald', sans-serif
-	font-weight 300
 	vertical-align bottom
 .option-group
 	display block
@@ -74,12 +147,10 @@ rouge_vif = #e14a31
 	bottom 0
 .option form
 	display inline
-#pages-container
-	user-select none
 .page-container
 	margin 0 auto
 	position relative
-.page-info,.page-actions
+.page-info
 	position absolute
 	top 7px
 	font-size 1.2em
@@ -89,7 +160,7 @@ rouge_vif = #e14a31
 	letter-spacing 1px
 	border-top 1px solid #424242
 	text-align right
-.page-info-item
+.rail-item
 	margin-top 20px
 .page-name, .page-info-hed
 	font-weight normal
@@ -121,10 +192,11 @@ rouge_vif = #e14a31
 /* Hotspots */
 .hotspot
 	position absolute
-	background-color rgba(255, 204, 0, .5)
+	background-color rgba(50, 183, 226, 0.5)
 	min-width 10px
 	min-height 20px
 	display table
+	// border 1px dashed rgba(0, 0, 0, .5)
 .hotspot:hover
 	cursor move
 .hotspot-number
@@ -135,9 +207,17 @@ rouge_vif = #e14a31
 .hotspot .destroy
 	position absolute
 	padding 5px
-	background-color #fc0
+	font-weight bold
+	font-family Helvetica, sans-serif
+	background-color #000
+	color #fff
+	border-bottom-left-radius 4px
 	right 0
+	height 20px
+	width 20px
+	text-align center
+	line-height 12px
 .hotspot .destroy:hover
-	text-decoration underline
+	background-color #e14a31
 	cursor pointer !important
 
