@@ -24,8 +24,30 @@
 		primeForDownload: function(){
 			data.info.endnotes = notes.record($('#endnotes-container'), 'objects');
 			data.info.pages = data.info.pages.sort(helpers.sortByNumber);
+			console.log(data.info)
 			var data_url = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data.info));
 			$('#download-button').attr('href','data:' + data_url);
+		},
+		load: function(evt){
+			var files = evt.target.files; // FileList object
+			// Loop through the FileList and render image files as thumbnails.
+			for (var i = 0, f; f = files[i]; i++) {
+				// Only process data files.
+				if (!f.type.match('application/json')) {
+					continue;
+				}
+				var reader = new FileReader();
+				// Closure to capture the file information.
+				reader.onload = (function(theFile) {
+					return function(e) {
+
+						var json = JSON.parse(e.target.result);
+						layout.layoutFromData.endnotes(json.endnotes);
+					};
+				})(f);
+				// Read in the image file as a data URL.
+				reader.readAsText(f);
+			}
 		}
 	};
 
@@ -35,6 +57,21 @@
 			$('#tabs li[data-which="'+which+'"]').addClass('active');
 			$('.main-container-el.active').removeClass('active');
 			$('.main-container-el[data-which="'+which+'"]').addClass('active');
+		},
+		layoutFromData: {
+			endnotes: function(endnotes){
+				endnotes.forEach(function(endnote){
+					var $template = $(templates.note),
+							text = endnote.text,
+							url = endnote.url;
+
+					$template.find('input[name="text"]').val(text);
+					$template.find('input[name="url"]').val(url);
+					console.log($template)
+					$els.endnotesContainer.find('ul').append($template);
+
+				});
+			}
 		}
 	};
 
@@ -249,7 +286,7 @@
 
 				var left_offset = this.positionElement($pageContainer.find('.page-info'), 'left');
 				// this.positionElement($pageContainer.find('.page-actions'), 'right');
-				$pageContainer.find('.page-info textarea').css('max-width',(left_offset - 20) + 'px')
+				$pageContainer.find('.page-info textarea').css('max-width',(left_offset - 20) + 'px');
 
 			},
 			positionElement: function($el, side){
@@ -264,8 +301,10 @@
 	var listeners = {
 		general: function(){
 			// Listen for file uploading
+		  document.getElementById('existing-data').addEventListener('change', data.load, false);
 		  document.getElementById('images').addEventListener('change', pageActions.addPages.load, false);
 		  $els.pagesContainer.on('mousedown', '.page-furniture', listeners.killPropagation);
+
 		  $('#tabs li').on('click', function(){
 		  	var $this = $(this),
 		  			which = $this.attr('data-which'),
@@ -275,6 +314,7 @@
 		  		layout.switchTabs(which);
 		  	}
 		  });
+
 		},
 		hotspotAdding: function(){
 		  // Listen for click events on each page-container
