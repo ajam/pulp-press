@@ -152,7 +152,8 @@ button:hover {
   text-align: center;
 }
 #endnotes-container input {
-  width: 40%;
+  width: 45%;
+  margin-right: 10px;
 }
 .option {
   font-size: 1.5em;
