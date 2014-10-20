@@ -24,7 +24,6 @@
 		primeForDownload: function(){
 			data.info.endnotes = notes.record($('#endnotes-container'), 'objects');
 			data.info.pages = data.info.pages.sort(helpers.sortByNumber);
-			console.log(data.info)
 			var data_url = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data.info));
 			$('#download-button').attr('href','data:' + data_url);
 		}
@@ -167,7 +166,6 @@
 			data.info.pages.push(page);
 			// Call the destroy within the context of the jQuery object
 			pageActions.destroy.call(this, true);
-			console.log(data.info)
 			data.primeForDownload();
 		},
 		record: {
@@ -219,7 +217,6 @@
 					var reader = new FileReader();
 					// Closure to capture the file information.
 					reader.onload = (function(theFile) {
-						// console.log(theFile)
 						return function(e) {
 							// Render thumbnail.
 							// Append to the thumbnail
