@@ -43,6 +43,8 @@
 
 						var json = JSON.parse(e.target.result);
 						layout.layoutFromData.endnotes(json.endnotes);
+						data.info.pages = json.pages;
+						data.primeForDownload();
 					};
 				})(f);
 				// Read in the image file as a data URL.
@@ -67,7 +69,6 @@
 
 					$template.find('input[name="text"]').val(text);
 					$template.find('input[name="url"]').val(url);
-					console.log($template)
 					$els.endnotesContainer.find('ul').append($template);
 
 				});
@@ -115,8 +116,11 @@
 			var $pageContainer = $(this);
 			states.createHotspotDragging = true;
 			// Increment this page's hotspot number by one
-			helpers.countHotspots($pageContainer, $new_hotspot, 'add');
-			var hotspot_markup = templates.hotspotFactory({hotspot_number: $pageContainer.attr('data-hotspots')});
+			helpers.countHotspots($pageContainer, null, 'add');
+			// Grab it
+			var hotspot_number = $pageContainer.attr('data-hotspots');
+			// Make this markup with the new number
+			var hotspot_markup = templates.hotspotFactory({hotspot_number: hotspot_number});
 			var $new_hotspot = $(hotspot_markup).appendTo( $pageContainer.find('.hotspots') );
 
 			$new_hotspot.css({
@@ -200,6 +204,12 @@
 			$(this).prop('disabled', true);
 			var page_number = +$(this).parents('.page-container').attr('data-page-number');
 			var page = pageActions.record.all(page_number);
+			// This could more nicely be accomplished by making this array a Backbone collection, which would handle merging of properties. But for now this is fine.
+			var page_already_in_data = _.findWhere(data.info.pages, {number: page.number});
+			if (page_already_in_data){
+				// Remove it from the data
+				data.info.pages = _.without(data.info.pages, page_already_in_data);
+			} 
 			data.info.pages.push(page);
 			// Call the destroy within the context of the jQuery object
 			pageActions.destroy.call(this, true);
@@ -278,11 +288,46 @@
 				target.append($pageContainer);
 				// Next load the image data and append it to the image container
 				$('<img class="panel-img" src="'+imageData+'"/>').load(function(){
+
+					var $el = $(this);
+					$el.prependTo( $pageContainer );
 					// This measurement will occur after the image has been appended usually
 					// But will ensure we're measuring the image after the dom has actually measured it
-					var loaded_img_width = $(this).width();
-					$pageContainer.width(loaded_img_width).css('visibility','visible');
-				}).prependTo( $pageContainer );
+					var loaded_img_width = $el.width(),
+							loaded_img_height = $el.height();
+
+					$pageContainer
+						.width(loaded_img_width)
+						.height(loaded_img_height)
+						.css('visibility','visible');
+
+					// If we've preloaded data and this page is in that data, load hotspots
+					var page_number = +fileName.split('.')[0].split('-')[1], // `"page-1.png"` --> `1`
+							existing_page_data = _.findWhere(data.info.pages, {number: page_number}),
+							hotspots;
+
+					if (existing_page_data){
+						hotspots = existing_page_data.hotspots;
+						hotspots.forEach(function(hotspot, index){
+
+							var hotspot_markup = templates.hotspotFactory({hotspot_number: (index+1) });
+							var $new_hotspot   = $(hotspot_markup).appendTo( $pageContainer.find('.hotspots') );
+
+							// Convert this list of css styles to json
+							$new_hotspot.attr('style', hotspot);
+							// These don't need this gate because they're being sized programatically
+							$new_hotspot.removeClass('create-dragging');
+
+							$new_hotspot.draggable({
+								containment: $pageContainer
+							}).resizable();
+
+						});
+						$pageContainer.attr('data-hotspots', hotspots.length);
+						
+					}
+
+				})
 
 				var left_offset = this.positionElement($pageContainer.find('.page-info'), 'left');
 				// this.positionElement($pageContainer.find('.page-actions'), 'right');
