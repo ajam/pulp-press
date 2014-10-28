@@ -303,7 +303,6 @@
 				var page_data = layout.fromData.pageText(fileName);
 				// Add our helpers
 				_.extend(page_data, helpers.templateFormatters);
-				console.log(page_data);
 				var page_container = templates.pageContainerFactory( page_data );
 				// Hide things on load so we don't get a flash as the image is moved towards the center
 				var $pageContainer = $( page_container ).css('visibility','hidden');

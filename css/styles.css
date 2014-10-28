@@ -262,7 +262,7 @@ button:hover {
   text-align: center;
   line-height: 12px;
 }
-.hotspot .destroy:hover {
+.hotspot:not(.create-dragging) .destroy:hover {
   background-color: #e14a31;
   cursor: pointer !important;
 }
