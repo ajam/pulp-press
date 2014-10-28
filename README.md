@@ -3,7 +3,7 @@ Pulp press
 
 A web comic maker to be used with the [Pulp](https://github.com/ajam/pulp) comic viewer.
 
-![](tk gif link)
+![](https://raw.githubusercontent.com/ajam/pulp-press/gh-pages/assets/making-pages.gif)
 
 ## How to use
 
