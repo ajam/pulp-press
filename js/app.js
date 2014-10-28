@@ -63,9 +63,11 @@
 			endnotes: function(endnotes){
 				endnotes.forEach(function(endnote){
 					var $template = $(templates.note),
+							page_panel = endnote.page_panel,
 							text = endnote.text,
 							url = endnote.url;
 
+					$template.find('input[name="page-panel"]').val(page_panel);
 					$template.find('input[name="text"]').val(text);
 					$template.find('input[name="url"]').val(url);
 					$els.endnotesContainer.find('ul').append($template);
@@ -200,16 +202,16 @@
 			var notes = [];
 			$cntr.find('.note-group').each(function(i){
 				var $this = $(this);
-				var text = $this.find('input[name="text"]').val(),
+				var page_panel  = $this.find('input[name="page-panel"]').val(),
+						text = $this.find('input[name="text"]').val(),
 						url  = $this.find('input[name="url"]').val(),
-						page_panel  = $this.find('input[name="page-panel"]').val(),
 						obj = {};
 				// Don't add if text is empty
 				if (text) {
 					if (mode == 'objects'){
 						obj.number = i + 1;
-						obj.text = text;
 						obj.page_panel = page_panel;
+						obj.text = text;
 						if (url) obj.url = url;
 					} else if (mode == 'list'){
 						obj = text;
