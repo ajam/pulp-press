@@ -1,7 +1,9 @@
 Pulp press
 ===
 
-A web comic maker to be used with the [Pulp](https://github.com/ajam/pulp) comic viewer (soon to be released).
+A web comic maker to be used with the [Pulp](https://github.com/ajam/pulp) comic viewer.
+
+![](tk gif link)
 
 ## How to use
 
