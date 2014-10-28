@@ -152,8 +152,11 @@ button:hover {
   text-align: center;
 }
 #endnotes-container input {
-  width: 45%;
+  width: 34%;
   margin-right: 10px;
+}
+#endnotes-container input[name="page-panel"] {
+  width: 24%;
 }
 .option {
   font-size: 1.5em;

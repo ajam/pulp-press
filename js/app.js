@@ -24,7 +24,6 @@
 		primeForDownload: function(){
 			data.info.endnotes = notes.record($('#endnotes-container'), 'objects');
 			data.info.pages = data.info.pages.sort(helpers.sortByNumber);
-			console.log(data.info)
 			var data_url = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data.info));
 			$('#download-button').attr('href','data:' + data_url);
 		},
@@ -203,12 +202,14 @@
 				var $this = $(this);
 				var text = $this.find('input[name="text"]').val(),
 						url  = $this.find('input[name="url"]').val(),
+						page_panel  = $this.find('input[name="page-panel"]').val(),
 						obj = {};
 				// Don't add if text is empty
 				if (text) {
 					if (mode == 'objects'){
 						obj.number = i + 1;
 						obj.text = text;
+						obj.page_panel = page_panel;
 						if (url) obj.url = url;
 					} else if (mode == 'list'){
 						obj = text;
