@@ -176,6 +176,7 @@ button:hover {
 .page-container {
   margin: 0 auto;
   position: relative;
+  max-width: 1000px;
 }
 .page-info {
   position: absolute;
@@ -197,6 +198,7 @@ button:hover {
 }
 .page-container img {
   pointer-events: none;
+  width: 100%;
 }
 /* Footnotes */
 .note-group {
