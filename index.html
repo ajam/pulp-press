@@ -84,11 +84,17 @@
 					</div>
 					<div class="alt-text rail-item">
 						<div class="page-info-hed">Script text</div>
-						<textarea placeholder="Panel dialog and captions..."></textarea>
+						<textarea placeholder="Panel dialog and captions..."><%= script_text %></textarea>
 					</div>
 					<div id="footnotes" class="rail-item notes-wrapper">
 						<div class="page-info-hed">Page text</div>
-						<div id="footnotes-container" class="notes-list-container"></div>
+						<div id="footnotes-container" class="notes-list-container">
+						<% page_text.forEach(function(pageText){ %>
+							<div class="note-group">
+								<div class="destroy"><span class="text">&times;</span></div><input type="text" name="text" placeholder="Text..." value="<%= pageText %>">
+							</div>
+						<% }) %>
+						</div>
 						<button class="add" data-mode="text">+</button>
 					</div>
 				</div>

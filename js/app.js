@@ -42,7 +42,7 @@
 					return function(e) {
 
 						var json = JSON.parse(e.target.result);
-						layout.layoutFromData.endnotes(json.endnotes);
+						layout.fromData.endnotes(json.endnotes);
 						data.info.pages = json.pages;
 						data.primeForDownload();
 					};
@@ -60,7 +60,7 @@
 			$('.main-container-el.active').removeClass('active');
 			$('.main-container-el[data-which="'+which+'"]').addClass('active');
 		},
-		layoutFromData: {
+		fromData: {
 			endnotes: function(endnotes){
 				endnotes.forEach(function(endnote){
 					var $template = $(templates.note),
@@ -72,6 +72,27 @@
 					$els.endnotesContainer.find('ul').append($template);
 
 				});
+			},
+			pageText: function(fName){
+				var page_data = {
+							fileName: fName,
+							script_text: '',
+							page_text: []
+						},
+						page_number = helpers.templateFormatters.extractPageNumber(fName),
+						existing_page_data = _.findWhere(data.info.pages, {number: page_number}),
+						existing_data_we_want;
+
+				// You could extend the whole object but that will give you unnecessary data
+				// So just grab the script and page text
+				if (existing_page_data){
+					existing_data_we_want = {
+						script_text: existing_page_data.script_text,
+						page_text: existing_page_data.page_text
+					};
+					_.extend(page_data, existing_data_we_want);
+				}
+				return page_data;
 			}
 		}
 	};
@@ -100,7 +121,7 @@
 		},
 		templateFormatters: {
 			extractPageNumber: function(fileName){
-				return fileName.split('-')[1].split('\.')[0]; // `page-1.png` => `1`
+				return +fileName.split('-')[1].split('\.')[0]; // `page-1.png` => `1`
 			}
 		},
 		cssifyValues: function(val){
@@ -277,10 +298,12 @@
 				}
 			},
 			append: function(fileName, imageData, target){
-				// Bake the markup from the template
-				var page_data = { fileName: fileName };
+				// Bake the markup from the template, adding data if it exists
+				// var page_data = { fileName: fileName };
+				var page_data = layout.fromData.pageText(fileName);
 				// Add our helpers
 				_.extend(page_data, helpers.templateFormatters);
+				console.log(page_data);
 				var page_container = templates.pageContainerFactory( page_data );
 				// Hide things on load so we don't get a flash as the image is moved towards the center
 				var $pageContainer = $( page_container ).css('visibility','hidden');
