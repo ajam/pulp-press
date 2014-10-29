@@ -49,3 +49,7 @@ python -m SimpleHTTPServer 8000
 ````
 
 In your browser, now go to <http://0.0.0.0:8000> to view.
+
+## License
+
+MIT
