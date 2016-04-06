@@ -1,6 +1,8 @@
 Pulp press
 ===
 
+**This repository is no longer being maintained. Please use [https://github.com/mhkeller/pulp-press2](https://github.com/mhkeller/pulp-press2).**
+
 A web comic maker to be used with the [Pulp](https://github.com/ajam/pulp) comic viewer.
 
 ![](https://raw.githubusercontent.com/ajam/pulp-press/gh-pages/assets/making-pages.gif)
